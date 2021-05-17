@@ -18,24 +18,20 @@
         width: 100%;
         padding-right: 50px;
       }
-
       #messages {
         list-style-type: none;
         margin: 0;
         padding: 0;
         width: 100%;
       }
-
       #messages li {
         padding: 5px 10px;
       }
-
       #messages li:nth-child(odd) {
         background: #eee;
       }
     </style>
   </head>
-
   <body>
     <div class="container-fluid">
       <div class="row">
@@ -83,6 +79,11 @@
         socket.emit('message', $('#m').val());
         $('#m').val('');
         return false;
+      });
+
+      socket.on('connect', () => {
+        // emiting to everybody
+        socket.emit('message', 'user connected');
       });
 
       socket.on('message', (msg) => {

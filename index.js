@@ -16,5 +16,11 @@ io.on('connection', (socket) => {
     socket.on('message', (msg) => {
         console.log(`message: ${msg}`);
         io.emit('message', msg);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+
+        io.emit('message', 'user disconnected');
     })
 })
