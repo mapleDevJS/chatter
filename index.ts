@@ -1,11 +1,23 @@
 import express, { Application, Request, Response } from 'express';
 import http, { Server } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
+import expressRateLimit from 'express-rate-limit';
 
 const app: Application = express();
 const server: Server = http.createServer(app);
 const io: SocketIOServer = new SocketIOServer(server);
 const port: number = 3000;
+
+const rateLimitWindowMs = 15 * 60 * 1000; // 15 minutes
+const rateLimitMaxRequest = 100; // limit each IP to 100 requests per window
+
+const apiLimiter = expressRateLimit({
+    windowMs: rateLimitWindowMs,
+    max: rateLimitMaxRequest,
+    message: 'Too many requests from this IP, please try again after an hour'
+});
+
+app.use(apiLimiter);
 
 const filesMap = new Map<string, string>([
     ['/', 'index'],
