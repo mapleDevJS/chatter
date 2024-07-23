@@ -17,8 +17,6 @@ const apiLimiter = expressRateLimit({
     message: 'Too many requests from this IP, please try again after an hour'
 });
 
-app.use(apiLimiter);
-
 const filesMap = new Map<string, string>([
     ['/', 'index'],
     ['/javascript', 'javascript'],
@@ -39,7 +37,7 @@ server.listen(port, () => {
 });
 
 filesMap.forEach((value, key) => {
-    app.get(key, publicFileResponse(value));
+    app.get(key, apiLimiter, publicFileResponse(value));
 });
 
 const tech = io.of('/tech');
